@@ -1,0 +1,4 @@
+apiVersion: v2
+description: A Helm Chart to deploy kafka-producer-proxy on Kubernetes
+name: kafka-producer-proxy
+version: 1.0

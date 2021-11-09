@@ -1,0 +1,12 @@
+{
+  "debug": true,
+  "serverPort": 39000,
+  "enableApiAuth": false,
+  "enableTLS": false,
+  "tlsCert": "",
+  "tlsKey": "",
+  "useKafkaCertAuth": true,
+  "kafkaBrokerGroups": [
+    "kafka-cl01"
+  ]
+}
