@@ -42,4 +42,9 @@ docker-push:
 git-tag:
 	git tag $(TAG)
 	git push origin --tags
-	
+
+.PHONY: helm-pack 
+helm-pack:
+	helm lint .helm
+	helm package .helm -d .github
+	helm repo index --url https://traviisd.github.io/kafka-producer-proxy/ .github
