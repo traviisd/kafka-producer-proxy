@@ -67,22 +67,40 @@ limits:
   memory: 2G
 {{- end }}
 {{- end }}
-{{- end }}
 
 {{/*
 Default service ports
 */}}
-{{- define "local.service" -}}
+{{- define "local.serviceType" -}}
 {{- if .Values.service }}
-{{- toYaml .Values.service | nindent 0 }}
+{{- default "ClusterIP" .Values.service.type }}
 {{- else }}
-type: ClusterIP
-port: 80
-containerPort: 39000
-annotations: {}
+{{- "ClusterIP" }}
 {{- end }}
 {{- end }}
+
+{{- define "local.servicePort" -}}
+{{- if .Values.service }}
+{{- default 80 .Values.service.port }}
+{{- else }}
+{{- 80 }}
 {{- end }}
+{{- end }}
+
+{{- define "local.serviceContainerPort" -}}
+{{- if .Values.service }}
+{{- default 39000 .Values.service.serviceContainerPort }}
+{{- else }}
+{{- 39000 }}
+{{- end }}
+{{- end }}
+
+{{- define "local.serviceAnnotations" -}}
+{{- if .Values.service }}
+{{- default dict .Values.service.annotations }}
+{{- end }}
+{{- end }}
+
 
 {{/*
 Default volume mounts
@@ -92,7 +110,6 @@ Default volume mounts
   mountPath: /config
 {{- if .Values.volumeMounts }}
 {{- toYaml .Values.volumeMounts | nindent 0 }}
-{{- end }}
 {{- end }}
 {{- end }}
 
@@ -105,6 +122,5 @@ Default volumes
     name: {{ .Release.Name }}
 {{- if .Values.volumes }}
 {{- toYaml .Values.volumes | nindent 0 }}
-{{- end }}
 {{- end }}
 {{- end }}
