@@ -1,5 +1,5 @@
 PACKAGES:=$(shell go list ./... | grep -v -e /vendor/)
-TAG:=1.0
+TAG:=v1.0-beta
 
 default: vendor
 
@@ -37,3 +37,9 @@ docker-build: test vendor
 .PHONY: docker-push
 docker-push:
 	docker push traviisd/kafka-producer-proxy:$(TAG)
+
+.PHONY: git-tag
+git-tag:
+	git tag $(TAG)
+	git push origin --tags
+	
