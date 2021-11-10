@@ -46,5 +46,5 @@ git-tag:
 .PHONY: helm-pack 
 helm-pack:
 	helm lint .helm
-	helm package .helm -d .github
-	helm repo index --url https://traviisd.github.io/kafka-producer-proxy/ .github
+	helm package .helm
+	helm repo index --url https://traviisd.github.io/kafka-producer-proxy/ .
