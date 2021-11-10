@@ -6,19 +6,16 @@ metadata:
   labels:
     {{- include "local.labels" . | nindent 4 }}
 spec:
-{{- if not .Values.autoscaling.enabled }}
-  replicas: {{ .Values.replicaCount }}
-{{- end }}
   revisionHistoryLimit: 3
   selector:
     matchLabels:
       {{- include "local.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-    {{- with .Values.podAnnotations }}
+      {{- with .Values.podAnnotations }}
       annotations:
         {{- toYaml . | nindent 8 }}
-    {{- end }}
+      {{- end }}
       labels:
         {{- include "local.labels" . | nindent 8 }}
     spec:
@@ -27,15 +24,13 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       serviceAccountName: {{ include "local.serviceAccountName" . }}
-      {{ include "local.automountServiceAccountToken" . | nindent 6 }}
-      securityContext:
-        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      {{ include "local.automountServiceAccountToken" . | indent 6 }}
       containers:
         - name: kafka-producer-proxy
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
           - name: http
-            containerPort: {{ .Values.service.containerPort }}
+            containerPort: {{ include "local.serviceContainerPort" . }}
             protocol: TCP
           livenessProbe:
             httpGet:
@@ -51,7 +46,6 @@ spec:
             periodSeconds: 15
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
-            {{- include "local.labels" . | nindent 12 }}
           env:
           - name: KAFKA_PUBLISHING_PROXY_APP_CONFIG
             value: /config/app-config.json

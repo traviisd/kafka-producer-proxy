@@ -6,14 +6,13 @@ metadata:
   labels:
     {{- include "local.labels" . | nindent 4 }}
   annotations:
-    {{- include "local.service" .annotations | indent 4 }}
+    {{- include "local.serviceAnnotations" . | indent 4 }}
 spec:
-  type: {{- include "local.service" .type }}
+  type: {{ include "local.serviceType" . }}
   ports:
-    - port: {{- include "local.service" .port }}
-      targetPort: {{- include "local.service" .containerPort }}
+    - port: {{ include "local.servicePort" . }}
+      targetPort: {{ include "local.serviceContainerPort" . }}
       protocol: TCP
       name: http
-  {{- end }}
   selector:
     {{- include "local.selectorLabels" . | nindent 4 }}
