@@ -6,8 +6,8 @@ autoscaling:
 
 image:
   repository: docker.io/traviisd/kafka-producer-proxy
-  pullPolicy: IfNotPresent
-  tag: v1.0
+  pullPolicy: Always
+  tag: latest
 
 imagePullSecrets: {}
 # - name: custom-configuration
