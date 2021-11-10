@@ -30,21 +30,24 @@ docker-run:
 		-e KAFKA_PUBLISHING_PROXY_TEMP_DIR=/secrets \
 		kpp-test
 
+# make docker-build -e TAG=v1.1
 .PHONY: docker-build
 docker-build: test vendor
 	docker build -t traviisd/kafka-producer-proxy:$(TAG) .
 
+# make docker-push -e TAG=v1.1
 .PHONY: docker-push
 docker-push:
 	docker push traviisd/kafka-producer-proxy:$(TAG)
 
+# make git-tag -e TAG=v1.1
 .PHONY: git-tag
 git-tag:
 	git tag $(TAG)
 	git push origin --tags
 
-.PHONY: helm-pack 
-helm-pack:
+.PHONY: helm-package
+helm-package:
 	helm lint .helm
 	helm package .helm
 	helm repo index --url https://traviisd.github.io/kafka-producer-proxy/ .

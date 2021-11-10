@@ -1,3 +1,18 @@
+# The configuration file app-config.json
+appConfig: |-
+  {
+    "debug": true,
+    "serverPort": 39000,
+    "enableApiAuth": false,
+    "enableTLS": false,
+    "tlsCert": "",
+    "tlsKey": "",
+    "useKafkaCertAuth": false,
+    "kafkaBrokerGroups": [
+      "kafka-cl01"
+    ]
+  }
+
 autoscaling:
   minReplicas: 1
   maxReplicas: 10
