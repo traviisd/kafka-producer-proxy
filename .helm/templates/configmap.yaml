@@ -6,4 +6,5 @@ metadata:
   labels:
     {{- include "local.labels" . | nindent 4 }}
 data:
-  app-config.json: {{ .Values.appConfig | nindent 4 }}
+  app-config.json: |-
+{{ .Values.appConfig | indent 4 }}
