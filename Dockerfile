@@ -3,7 +3,7 @@ FROM golang:alpine AS builder
 
 # Install ca-certificates
 # Git is required for fetching the dependencies.
-RUN apk update && apk add ca-certificates && rm -rf /var/cache/apk/* && update-ca-certificates
+RUN apk update && apk add ca-certificates gcc musl-dev && rm -rf /var/cache/apk/* && update-ca-certificates
 
 # Create appuser.
 ENV USER=appuser
@@ -26,7 +26,7 @@ COPY . .
 RUN pwd && ls -al
 
 # Build the binary.
-RUN go build -tags=musl -ldflags="-s -w" -o /go/bin/kafka-producer-proxy *.go
+RUN go build -tags musl -ldflags="-s -w" -o /go/bin/kafka-producer-proxy *.go
 
 # Run image
 FROM alpine:3
