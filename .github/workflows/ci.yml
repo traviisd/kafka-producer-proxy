@@ -52,8 +52,8 @@ jobs:
             --label org.opencontainers.image.description='A simple, lightweight, and flexible Kafka producer.' \
             --label org.opencontainers.image.url=https://github.com/traviisd/kafka-producer-proxy \
             --label org.opencontainers.image.source=https://github.com/traviisd/kafka-producer-proxy \
-            --label org.opencontainers.image.version=$GITHUB_RUN_ID \
-            --label org.opencontainers.image.created=$(date +%s) \
+            --label org.opencontainers.image.version=$IMAGE_BASE_VERSION.$GITHUB_RUN_NUMBER \
+            --label org.opencontainers.image.created=$(date +%v) \
             --label org.opencontainers.image.revision=$GITHUB_SHA \
             --label org.opencontainers.image.licenses=MIT \
             -t traviisd/kafka-producer-proxy:$GITHUB_RUN_ID \
@@ -63,9 +63,9 @@ jobs:
         name: Docker Security Scan
         uses: Azure/container-scan@v0
         with:
-          image-name: "traviisd/kafka-producer-proxy:$GITHUB_RUN_ID"
+          image-name: "traviisd/kafka-producer-proxy:${{ env.$IMAGE_BASE_VERSION}}.${{ env.GITHUB_RUN_NUMBER }}"
 
       -
         name: Docker Push
         if: ${{ github.event_name != 'pull_request' }}
-        run: docker push traviisd/kafka-producer-proxy:$GITHUB_RUN_ID
+        run: docker push traviisd/kafka-producer-proxy:$IMAGE_BASE_VERSION.$GITHUB_RUN_NUMBER
