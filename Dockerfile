@@ -1,9 +1,9 @@
 # Build image
-FROM golang:buster AS builder
+FROM golang:alpine AS builder
 
 # Install ca-certificates
 # Git is required for fetching the dependencies.
-RUN apt-get update && apt-get install -y ca-certificates && update-ca-certificates
+RUN apk update && apk add ca-certificates && rm -rf /var/cache/apk/* && update-ca-certificates
 
 # Create appuser.
 ENV USER=appuser
@@ -26,13 +26,10 @@ COPY . .
 RUN pwd && ls -al
 
 # Build the binary.
-RUN go build -ldflags="-s -w" -o /go/bin/kafka-producer-proxy *.go
+RUN go build -tags=musl -ldflags="-s -w" -o /go/bin/kafka-producer-proxy *.go
 
 # Run image
-FROM debian:buster-slim
-
-# Import certs
-RUN apt-get update && apt-get install -y ca-certificates && update-ca-certificates
+FROM alpine:3
 
 # Import the user and group files from the builder.
 COPY --from=builder /etc/passwd /etc/passwd
