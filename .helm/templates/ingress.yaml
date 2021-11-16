@@ -11,11 +11,11 @@ metadata:
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
-  {{- if .Values.ingress.tls }}
+  {{- if .Values.ingress.tlsSecretName }}
   tls:
   - hosts:
       - {{ .Values.ingress.host | quote }}
-    secretName: {{ .secretName }}
+    secretName: {{ .Values.ingress.tlsSecretName }}
   {{- end }}
   rules:
   - host: {{ .Values.ingress.host | quote }}
