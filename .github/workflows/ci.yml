@@ -50,7 +50,7 @@ jobs:
             --label org.opencontainers.image.created=$(date +%v) \
             --label org.opencontainers.image.revision=$GITHUB_SHA \
             --label org.opencontainers.image.licenses=MIT \
-            -t traviisd/kafka-producer-proxy:$GITHUB_RUN_ID \
+            -t traviisd/kafka-producer-proxy:$IMAGE_VERSION \
             -t traviisd/kafka-producer-proxy:latest
           
       - 
