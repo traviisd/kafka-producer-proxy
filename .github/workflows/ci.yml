@@ -63,7 +63,7 @@ jobs:
         name: Docker Security Scan
         uses: Azure/container-scan@v0
         with:
-          image-name: "traviisd/kafka-producer-proxy:${{ env.$IMAGE_BASE_VERSION}}.${{ env.GITHUB_RUN_NUMBER }}"
+          image-name: "traviisd/kafka-producer-proxy:${{ env.IMAGE_BASE_VERSION}}.${{ env.GITHUB_RUN_NUMBER }}"
 
       -
         name: Docker Push
