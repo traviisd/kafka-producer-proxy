@@ -19,9 +19,6 @@ on:
       - "Makefile"
       - "**.md"
 
-env:
-  docker_img_name: traviisd/kafka-producer-proxy
-  
 jobs:
   push_to_registry:
     name: Push Docker image to Docker Hub
@@ -35,7 +32,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v3
         with:
-          images: ${{ docker_img_name }}
+          images: traviisd/kafka-producer-proxy
       -
         name: Login to DockerHub
         uses: docker/login-action@v1
@@ -44,15 +41,15 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
       -
         name: Docker Build
-        run: docker build . --label ${{ steps.meta.outputs.labels }} -t ${{ docker_img_name }}:${{ steps.meta.outputs.tags }}
+        run: docker build . --label ${{ steps.meta.outputs.labels }} -t traviisd/kafka-producer-proxy:${{ steps.meta.outputs.tags }}
           
       - 
         name: Docker Security Scan
         uses: Azure/container-scan@v0
         with:
-          image-name: ${{ docker_img_name }}:${{ steps.meta.outputs.tags }}
+          image-name: traviisd/kafka-producer-proxy:${{ steps.meta.outputs.tags }}
 
       -
         name: Docker Push
-        if: ${{ (github.event_name != 'pull_request') && ("${GITHUB_REF##*/}" == 'master' }}
-        run: docker push ${{ docker_img_name }}:${{ steps.meta.outputs.tags }}
+        if: ${{ github.event_name != 'pull_request' }}
+        run: docker push traviisd/kafka-producer-proxy:${{ steps.meta.outputs.tags }}
