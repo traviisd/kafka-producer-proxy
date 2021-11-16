@@ -12,12 +12,16 @@ on:
       - "**.md"
   pull_request:
     branches:
+      - 'main'
       - 'master'
     paths-ignore:
       - ".helm"
       - "Makefile"
       - "**.md"
 
+env:
+  docker_img_name: traviisd/kafka-producer-proxy
+  
 jobs:
   push_to_registry:
     name: Push Docker image to Docker Hub
@@ -31,19 +35,24 @@ jobs:
         id: meta
         uses: docker/metadata-action@v3
         with:
-          images: traviisd/kafka-producer-proxy
+          images: ${{ docker_img_name }}
       -
         name: Login to DockerHub
-        if: github.event_name != 'pull_request'
         uses: docker/login-action@v1
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
       -
-        name: Build and push
-        uses: docker/build-push-action@v2
+        name: Docker Build
+        run: docker build . --label ${{ steps.meta.outputs.labels }} -t ${{ docker_img_name }}:${{ steps.meta.outputs.tags }}
+          
+      - 
+        name: Docker Security Scan
+        uses: Azure/container-scan@v0
         with:
-          context: .
-          push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          image-name: ${{ docker_img_name }}:${{ steps.meta.outputs.tags }}
+
+      -
+        name: Docker Push
+        if: ${{ (github.event_name != 'pull_request') && ("${GITHUB_REF##*/}" == 'master' }}
+        run: docker push ${{ docker_img_name }}:${{ steps.meta.outputs.tags }}
