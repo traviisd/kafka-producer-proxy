@@ -31,18 +31,11 @@ jobs:
         name: Check out the repo
         uses: actions/checkout@v2
         
-      - 
-        name: ENV Setup
-        shell: bash
-        run: |
-          echo "IMAGE_VERSION=${{env.IMAGE_BASE_VERSION}}.${{github.run_number}}" >> $GITHUB_ENV
-          echo "IMAGE_LATEST_TAG=${LATEST_TAG}" >> $GITHUB_ENV
-      - 
-        name: Docker meta
-        id: meta
-        uses: docker/metadata-action@v3
-        with:
-          images: traviisd/kafka-producer-proxy
+#       - 
+#         name: ENV Setup
+#         shell: bash
+#         run: |
+#           echo "IMAGE_VERSION=${{env.IMAGE_BASE_VERSION}}.${{github.run_number}}" >> $GITHUB_ENV
           
       -
         name: Login to DockerHub
@@ -55,18 +48,24 @@ jobs:
         run: |
           docker build . \
             --output type=docker \
-            --label ${{ steps.meta.outputs.labels }} \
-            -t traviisd/kafka-producer-proxy:${{ env.IMAGE_VERSION }} \
+            --label org.opencontainers.image.title=kafka-producer-proxy \
+            --label org.opencontainers.image.description='A simple, lightweight, and flexible Kafka producer.' \
+            --label org.opencontainers.image.url=https://github.com/traviisd/kafka-producer-proxy \
+            --label org.opencontainers.image.source=https://github.com/traviisd/kafka-producer-proxy \
+            --label org.opencontainers.image.version=$GITHUB_RUN_ID \
+            --label org.opencontainers.image.created=$(date +%s) \
+            --label org.opencontainers.image.revision=$GITHUB_SHA \
+            --label org.opencontainers.image.licenses=MIT \
+            -t traviisd/kafka-producer-proxy:$GITHUB_RUN_ID \
             -t traviisd/kafka-producer-proxy:latest
           
       - 
         name: Docker Security Scan
         uses: Azure/container-scan@v0
         with:
-          image-name: "traviisd/kafka-producer-proxy:${{ env.IMAGE_VERSION }}"
+          image-name: "traviisd/kafka-producer-proxy:$GITHUB_RUN_ID"
 
       -
         name: Docker Push
         if: ${{ github.event_name != 'pull_request' }}
-        run: |
-          docker push traviisd/kafka-producer-proxy:${{ env.IMAGE_VERSION }}
+        run: docker push traviisd/kafka-producer-proxy:$GITHUB_RUN_ID
