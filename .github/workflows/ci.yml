@@ -12,12 +12,16 @@ on:
       - "**.md"
   pull_request:
     branches:
+      - 'main'
       - 'master'
     paths-ignore:
       - ".helm"
       - "Makefile"
       - "**.md"
 
+env:
+  IMAGE_BASE_VERSION: "1.0"
+  
 jobs:
   push_to_registry:
     name: Push Docker image to Docker Hub
@@ -26,24 +30,43 @@ jobs:
       - 
         name: Check out the repo
         uses: actions/checkout@v2
+        
       - 
-        name: Docker meta
-        id: meta
-        uses: docker/metadata-action@v3
+        name: ENV Setup
+        shell: bash
+        run: |
+          echo "IMAGE_VERSION=${{env.IMAGE_BASE_VERSION}}.${{github.run_number}}" >> $GITHUB_ENV
+          
+      -
+        name: Docker Build
+        run: |
+          docker build . \
+            --output type=docker \
+            --label org.opencontainers.image.title=kafka-producer-proxy \
+            --label org.opencontainers.image.description='A simple, lightweight, and flexible Kafka producer.' \
+            --label org.opencontainers.image.url=https://github.com/traviisd/kafka-producer-proxy \
+            --label org.opencontainers.image.source=https://github.com/traviisd/kafka-producer-proxy \
+            --label org.opencontainers.image.version=$IMAGE_VERSION \
+            --label org.opencontainers.image.created=$(date +%v) \
+            --label org.opencontainers.image.revision=$GITHUB_SHA \
+            --label org.opencontainers.image.licenses=MIT \
+            -t traviisd/kafka-producer-proxy:$IMAGE_VERSION \
+            -t traviisd/kafka-producer-proxy:latest
+          
+      - 
+        name: Docker Security Scan
+        uses: Azure/container-scan@v0
         with:
-          images: traviisd/kafka-producer-proxy
+          image-name: traviisd/kafka-producer-proxy:${{ env.IMAGE_VERSION }}
+
       -
         name: Login to DockerHub
-        if: github.event_name != 'pull_request'
         uses: docker/login-action@v1
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
+          
       -
-        name: Build and push
-        uses: docker/build-push-action@v2
-        with:
-          context: .
-          push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+        name: Docker Push
+        if: ${{ github.event_name != 'pull_request' }}
+        run: docker push traviisd/kafka-producer-proxy:$IMAGE_VERSION
