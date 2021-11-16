@@ -79,10 +79,5 @@ podAnnotations: {}
 ingress: {}
   # annotations: {}
   #   # kubernetes.io/ingress.class: nginx
-  # hosts:
-  #   - host: example.name
-  #     paths: []
-  # tls: []
-  # #  - secretName: example-name-tls
-  # #    hosts:
-  # #      - example.name
+  # host: kafka-producer-proxy.example.com
+  # tlsSecretName: example-name-tls

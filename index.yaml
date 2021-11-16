@@ -2,11 +2,11 @@ apiVersion: v1
 entries:
   kafka-producer-proxy:
   - apiVersion: v2
-    created: "2021-11-10T15:56:16.489437-08:00"
+    created: "2021-11-16T12:46:58.814-08:00"
     description: A Helm Chart to deploy kafka-producer-proxy on Kubernetes
-    digest: 0be1c3f93642e316c344a769c5ee80ce921cfea82c651e1ffc49127aad347292
+    digest: ce8f5d6f97feaad9f3d0e4a88ed8ab23c42eab451a86a682a1c4e6647aeedb9d
     name: kafka-producer-proxy
     urls:
     - https://traviisd.github.io/kafka-producer-proxy/kafka-producer-proxy-1.tgz
     version: "1"
-generated: "2021-11-10T15:56:16.488014-08:00"
+generated: "2021-11-16T12:46:58.812901-08:00"
