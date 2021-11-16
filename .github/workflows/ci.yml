@@ -19,6 +19,9 @@ on:
       - "Makefile"
       - "**.md"
 
+env:
+  IMAGE_BASE_VERSION: 1.0
+  
 jobs:
   push_to_registry:
     name: Push Docker image to Docker Hub
@@ -27,17 +30,20 @@ jobs:
       - 
         name: Check out the repo
         uses: actions/checkout@v2
+        
+      - 
+        name: ENV Setup
+        shell: bash
+        run: |
+          echo "IMAGE_VERSION=${{env.IMAGE_BASE_VERSION}}.${{github.run_number}}" >> $GITHUB_ENV
+          echo "IMAGE_LATEST_TAG=${LATEST_TAG}" >> $GITHUB_ENV
       - 
         name: Docker meta
         id: meta
         uses: docker/metadata-action@v3
         with:
           images: traviisd/kafka-producer-proxy
-          tags: |
-            type=ref,event=branch
-            type=ref,event=pr
-            type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
+          
       -
         name: Login to DockerHub
         uses: docker/login-action@v1
@@ -46,15 +52,20 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
       -
         name: Docker Build
-        run: docker build . --label ${{ steps.meta.outputs.labels }} -t traviisd/kafka-producer-proxy:${{ steps.meta.outputs.tags }}
+        run: |
+          docker build . \
+            --output type=docker \
+            --label ${{ steps.meta.outputs.labels }} \
+            -t traviisd/kafka-producer-proxy:${{ env.IMAGE_VERSION }} \
+            -t traviisd/kafka-producer-proxy:latest
           
       - 
         name: Docker Security Scan
         uses: Azure/container-scan@v0
         with:
-          image-name: traviisd/kafka-producer-proxy:${{ steps.meta.outputs.tags }}
+          image-name: traviisd/kafka-producer-proxy:${{ env.IMAGE_VERSION }}
 
       -
         name: Docker Push
         if: ${{ github.event_name != 'pull_request' }}
-        run: docker push traviisd/kafka-producer-proxy:${{ steps.meta.outputs.tags }}
+        run: docker push traviisd/kafka-producer-proxy:${{ env.IMAGE_VERSION }}
