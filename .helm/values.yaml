@@ -20,7 +20,7 @@ autoscaling:
   targetMemoryUtilizationPercentage: 90
 
 image:
-  repository: docker.io/traviisd/kafka-producer-proxy
+  repository: traviisd/kafka-producer-proxy
   pullPolicy: Always
   tag: latest
 

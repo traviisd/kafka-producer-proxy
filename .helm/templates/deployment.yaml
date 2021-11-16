@@ -27,6 +27,7 @@ spec:
       {{ include "local.automountServiceAccountToken" . | indent 6 }}
       containers:
         - name: kafka-producer-proxy
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
           - name: http
