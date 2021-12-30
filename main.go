@@ -14,7 +14,7 @@ func main() {
 	// UNIX Time is faster and smaller than most timestamps
 	zerolog.TimeFieldFormat = zerolog.TimeFormatUnix
 
-	api.SetAppConfig(os.Getenv("KAFKA_PUBLISHING_PROXY_APP_CONFIG"))
+	api.SetAppConfig(os.Getenv("KAFKA_PRODUCER_PROXY_APP_CONFIG"))
 
 	done := make(chan bool)
 	defer func() {
@@ -29,7 +29,7 @@ func main() {
 }
 
 func configureSecrets(done chan bool) {
-	secretsPath := os.Getenv("KAFKA_PUBLISHING_PROXY_SECRETS_PATH")
+	secretsPath := os.Getenv("KAFKA_PRODUCER_PROXY_SECRETS_PATH")
 	sf := fmt.Sprintf("%s/secrets.json", secretsPath)
 	kcf := fmt.Sprintf("%s/internal-ca.json", secretsPath)
 

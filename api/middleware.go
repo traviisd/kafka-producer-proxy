@@ -50,7 +50,7 @@ func newKafkaMiddleware() (*kafkaMiddleware, error) {
 			kcm["ssl.certificate.pem"] = KafkaCertFiles.CerRaw
 			kcm["ssl.key.pem"] = KafkaCertFiles.KeyRaw
 		} else {
-			kcm["ssl.ca.location"] = os.Getenv("KAFKA_PUBLISHING_PROXY_SSL_CA_LOCATION")
+			kcm["ssl.ca.location"] = os.Getenv("KAFKA_PRODUCER_PROXY_SSL_CA_LOCATION")
 			kcm["sasl.mechanisms"] = cfg.SaslMechanisms
 			kcm["sasl.username"] = cfg.Username
 			kcm["sasl.password"] = cfg.Password

@@ -57,7 +57,7 @@ func SetAppSecrets(data []byte) {
 
 // SetCertData sets the application secrets
 func SetCertData(data []byte) {
-	dir := fmt.Sprintf("%s%s", os.Getenv("KAFKA_PUBLISHING_PROXY_TEMP_DIR"), string(os.PathSeparator))
+	dir := fmt.Sprintf("%s%s", os.Getenv("KAFKA_PRODUCER_PROXY_TEMP_DIR"), string(os.PathSeparator))
 	cfg := certConfig{}
 	if err := json.Unmarshal(data, &cfg); err != nil {
 		log.Err(err).Msg("oops...")

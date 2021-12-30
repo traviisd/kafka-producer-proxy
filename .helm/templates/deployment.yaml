@@ -48,11 +48,11 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           env:
-          - name: KAFKA_PUBLISHING_PROXY_APP_CONFIG
+          - name: KAFKA_PRODUCER_PROXY_APP_CONFIG
             value: /config/app-config.json
-          - name: KAFKA_PUBLISHING_PROXY_SECRETS_PATH
+          - name: KAFKA_PRODUCER_PROXY_SECRETS_PATH
             value: /secrets
-          - name: KAFKA_PUBLISHING_PROXY_TEMP_DIR
+          - name: KAFKA_PRODUCER_PROXY_TEMP_DIR
             value: /tmp/proxy
 
           volumeMounts:
