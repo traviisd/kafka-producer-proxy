@@ -66,7 +66,7 @@ func (rh router) GetAvailableClusters(w http.ResponseWriter, r *http.Request) {
 type EventRequest struct {
 	Cluster string                 `json:"cluster"`
 	Topic   string                 `json:"topic"`
-	Key     string                 `json:"key"`
+	Key     interface{}            `json:"key"`
 	Data    map[string]interface{} `json:"data"`
 }
 
