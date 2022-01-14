@@ -9,4 +9,6 @@ entries:
     urls:
     - https://traviisd.github.io/kafka-producer-proxy/kafka-producer-proxy-1.0.0.tgz
     version: 1.0.0
+    - https://traviisd.github.io/kafka-producer-proxy/kafka-producer-proxy-1.2.0.tgz
+    version: 1.2.0
 generated: "2021-11-16T13:35:28.361229-08:00"
