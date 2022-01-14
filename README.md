@@ -132,7 +132,7 @@ autoscaling:
 image:
   repository: traviisd/kafka-producer-proxy
   pullPolicy: IfNotPresent
-  tag: 1.0.33
+  tag: 1.0.45
 
 imagePullSecrets: {}
 # - name: custom-configuration
