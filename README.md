@@ -93,6 +93,8 @@ This only needs to exist if `enableKafkaCertAuth`. This structure is based off o
 
 [Helm Chart](.helm/)
 
+Deploy the chart from this repo: `helm repo index --url https://traviisd.github.io/kafka-producer-proxy .`
+
 GitHub pages serves as `helm repo add traviisd https://traviisd.github.io/kafka-producer-proxy`
 `helm upgrade --install kafka-producer-proxy traviisd/kafka-producer-proxy --version 1.0.0`
 

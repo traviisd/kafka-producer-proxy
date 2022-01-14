@@ -30,7 +30,7 @@ func configureRouter(mr *mux.Router, kp kafkaProducer) {
 
 	mr.HandleFunc("/ping", r.Ping).Methods(http.MethodGet)
 	mr.HandleFunc("/health", r.Health).Methods(http.MethodGet)
-	mr.HandleFunc("/events", r.PublishEvent).Methods(http.MethodPost)
+	mr.HandleFunc("/events", r.PublishEvent).Methods(http.MethodPost, http.MethodDelete)
 	mr.HandleFunc("/clusters", r.GetAvailableClusters).Methods(http.MethodGet)
 }
 
@@ -94,6 +94,8 @@ func (rh router) PublishEvent(w http.ResponseWriter, r *http.Request) {
 		writeErrorResponse(w, log, "error deserializing request body", err)
 		return
 	}
+
+	log.Debug().Msg(fmt.Sprintf("%s: %s", r.Method, er))
 
 	result := rh.kp.Produce(ProduceOptions{
 		Context: r.Context(),
