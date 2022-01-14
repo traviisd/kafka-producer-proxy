@@ -6,6 +6,9 @@ A flexible and scalable REST API that publishes to configured Kafka brokers.
 
 [![CodeQL](https://github.com/traviisd/kafka-producer-proxy/actions/workflows/codeql-analysis.yml/badge.svg?branch=master)](https://github.com/traviisd/kafka-producer-proxy/actions/workflows/codeql-analysis.yml)
 
+[Docker Images](https://hub.docker.com/repository/docker/traviisd/kafka-producer-proxy/tags?page=1&ordering=last_updated)
+
+
 ## Configuration
 
 ### `app-config.json`
