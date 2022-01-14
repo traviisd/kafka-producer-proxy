@@ -23,7 +23,7 @@ type ProduceOptions struct {
 	Log     *zerolog.Logger
 	Cluster string
 	Topic   string
-	Key     string
+	Key     interface{}
 	Data    map[string]interface{}
 }
 
@@ -89,6 +89,15 @@ func (p producer) Produce(options ProduceOptions) *Result {
 		}
 	}()
 
+	// parse key to byte
+	key, err := json.Marshal(options.Key)
+	if err != nil {
+		return &Result{
+			Message: "Could not parse 'key' field",
+			Error:   err,
+		}
+	}
+
 	// parse data to byte
 	value, err := json.Marshal(options.Data)
 	if err != nil {
@@ -104,7 +113,7 @@ func (p producer) Produce(options ProduceOptions) *Result {
 			Topic:     &options.Topic,
 			Partition: int32(kafka.PartitionAny),
 		},
-		Key:   []byte(options.Key),
+		Key:   key,
 		Value: value,
 	}
 

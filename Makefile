@@ -13,10 +13,10 @@ test:
 
 .PHONY: run
 run:
-# KAFKA_PUBLISHING_PROXY_SSL_CA_LOCATION=$(shell pwd)/testdata
-	KAFKA_PUBLISHING_PROXY_APP_CONFIG=$(shell pwd)/.local/app-config.json \
-	KAFKA_PUBLISHING_PROXY_SECRETS_PATH=$(shell pwd)/.local \
-	KAFKA_PUBLISHING_PROXY_TEMP_DIR=$(shell pwd)/.local \
+# KAFKA_PRODUCER_PROXY_SSL_CA_LOCATION=$(shell pwd)/testdata
+	KAFKA_PRODUCER_PROXY_APP_CONFIG=$(shell pwd)/.local/app-config.json \
+	KAFKA_PRODUCER_PROXY_SECRETS_PATH=$(shell pwd)/.local \
+	KAFKA_PRODUCER_PROXY_TEMP_DIR=$(shell pwd)/.local \
 	go run main.go
 
 .PHONY: docker-run
@@ -25,9 +25,9 @@ docker-run:
 	docker run --read-only --rm \
 		-p 39000:39000 \
 		-v $(shell pwd)/.local:/secrets \
-		-e KAFKA_PUBLISHING_PROXY_APP_CONFIG=/secrets/app-config.json \
-	 	-e KAFKA_PUBLISHING_PROXY_SECRETS_PATH=/secrets \
-		-e KAFKA_PUBLISHING_PROXY_TEMP_DIR=/secrets \
+		-e KAFKA_PRODUCER_PROXY_APP_CONFIG=/secrets/app-config.json \
+	 	-e KAFKA_PRODUCER_PROXY_SECRETS_PATH=/secrets \
+		-e KAFKA_PRODUCER_PROXY_TEMP_DIR=/secrets \
 		kpp-test
 
 # make docker-build -e TAG=v1.1
