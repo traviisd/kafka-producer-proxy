@@ -2,6 +2,13 @@
 
 A flexible and scalable REST API that publishes to configured Kafka brokers.
 
+[![ci](https://github.com/traviisd/kafka-producer-proxy/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/traviisd/kafka-producer-proxy/actions/workflows/ci.yml)
+
+[![CodeQL](https://github.com/traviisd/kafka-producer-proxy/actions/workflows/codeql-analysis.yml/badge.svg?branch=master)](https://github.com/traviisd/kafka-producer-proxy/actions/workflows/codeql-analysis.yml)
+
+[Docker Images](https://hub.docker.com/repository/docker/traviisd/kafka-producer-proxy/tags?page=1&ordering=last_updated)
+
+
 ## Configuration
 
 ### `app-config.json`
@@ -125,7 +132,7 @@ autoscaling:
 image:
   repository: traviisd/kafka-producer-proxy
   pullPolicy: IfNotPresent
-  tag: 1.0.33
+  tag: 1.0.45
 
 imagePullSecrets: {}
 # - name: custom-configuration
