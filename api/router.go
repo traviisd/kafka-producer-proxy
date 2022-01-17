@@ -1,12 +1,14 @@
 package api
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
 	"strings"
 
+	"github.com/confluentinc/confluent-kafka-go/kafka"
 	"github.com/gorilla/mux"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/hlog"
@@ -37,7 +39,39 @@ func configureRouter(mr *mux.Router, kp kafkaProducer) {
 // Health checks the health of the API. Should try
 // to run commands to ensure proper permissions.
 func (rh router) Health(w http.ResponseWriter, r *http.Request) {
-	// add more in-depth checks here.
+	errs := &bytes.Buffer{}
+
+	for _, cluster := range Config.KafkaBrokerGroups {
+		var p *kafka.Producer
+		var ac *kafka.AdminClient
+		var err error
+
+		p, err = getProducer(r.Context(), cluster)
+		if err != nil {
+			errs.WriteString(fmt.Sprintf("%s\n", err.Error()))
+		}
+
+		if p != nil {
+			ac, err = kafka.NewAdminClientFromProducer(p)
+			if err != nil {
+				errs.WriteString(fmt.Sprintf("%s\n", err.Error()))
+			}
+		}
+
+		if ac != nil {
+			_, err = ac.ClusterID(r.Context())
+			if err != nil {
+				errs.WriteString(fmt.Sprintf("%s\n", err.Error()))
+			}
+		}
+	}
+
+	if errs.Len() > 0 {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(fmt.Sprintf("{\"errors\": \"%s\"}", errs.String())))
+		return
+	}
+
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte(http.StatusText(http.StatusOK)))
 }

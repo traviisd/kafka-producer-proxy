@@ -52,7 +52,7 @@ func TestHealthSuccess(t *testing.T) {
 
 	resp := w.Result()
 
-	assert.Equal(t, http.StatusOK, resp.StatusCode)
+	assert.Equal(t, http.StatusInternalServerError, resp.StatusCode)
 }
 
 func TestCheckStatusPingSuccess(t *testing.T) {
