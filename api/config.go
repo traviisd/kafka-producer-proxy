@@ -18,6 +18,7 @@ type appConfig struct {
 	TLSKey            string   `json:"tlsKey"`
 	UseKafkaCertAuth  bool     `json:"useKafkaCertAuth"`
 	KafkaBrokerGroups []string `json:"kafkaBrokerGroups"`
+	KafkaHealthTopic  *string  `json:"kafkaHealthTopic,omitempty"`
 }
 
 // SetAppConfig deserializes a config.json (any name) file into the config struct to allow access to

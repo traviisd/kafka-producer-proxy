@@ -59,7 +59,8 @@ func (rh router) Health(w http.ResponseWriter, r *http.Request) {
 		}
 
 		if ac != nil {
-			_, err = ac.ClusterID(r.Context())
+			// Get a single or all topics, timeout of 15 seconds
+			_, err = ac.GetMetadata(Config.KafkaHealthTopic, (Config.KafkaHealthTopic == nil), 15000)
 			if err != nil {
 				errs.WriteString(fmt.Sprintf("%s\n", err.Error()))
 			}
