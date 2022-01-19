@@ -12,7 +12,8 @@ appConfig: |-
     "useKafkaCertAuth": false,
     "kafkaBrokerGroups": [
       "kafka-cl01"
-    ]
+    ],
+    "kafkaHealthTopic":""
   }
 
 autoscaling:
